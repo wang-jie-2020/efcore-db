@@ -11,11 +11,14 @@ namespace Demo.EntityFrameworkCore.Extensions
 
         public DbContextOptionsBuilder DbContextOptionsBuilder { get; protected set; }
 
-        public ConfigureDbContextOptionsBuilder(IServiceProvider serviceProvider)
+        protected string ConnectionString { get; set; }
+
+        public ConfigureDbContextOptionsBuilder(IServiceProvider serviceProvider, string connectionString)
         {
             ServiceProvider = serviceProvider;
             DbContextOptionsBuilder = new DbContextOptionsBuilder()
                 .UseLoggerFactory(serviceProvider.GetRequiredService<ILoggerFactory>());
+            ConnectionString = connectionString;
         }
     }
 
@@ -25,7 +28,7 @@ namespace Demo.EntityFrameworkCore.Extensions
         public new DbContextOptionsBuilder<TDbContext> DbContextOptionsBuilder =>
             (DbContextOptionsBuilder<TDbContext>)base.DbContextOptionsBuilder;
 
-        public ConfigureDbContextOptionsBuilder(IServiceProvider serviceProvider) : base(serviceProvider)
+        public ConfigureDbContextOptionsBuilder(IServiceProvider serviceProvider, string connectionString) : base(serviceProvider, connectionString)
         {
             base.DbContextOptionsBuilder = new DbContextOptionsBuilder<TDbContext>()
                 .UseLoggerFactory(serviceProvider.GetRequiredService<ILoggerFactory>());

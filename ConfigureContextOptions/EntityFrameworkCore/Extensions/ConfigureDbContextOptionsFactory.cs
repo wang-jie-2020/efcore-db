@@ -12,7 +12,7 @@ namespace Demo.EntityFrameworkCore.Extensions
             where TDbContext : DbContext
         {
             var options = serviceProvider.GetRequiredService<IOptions<ConfigureDbContextOptions>>().Value;
-            var builder = new ConfigureDbContextOptionsBuilder<TDbContext>(serviceProvider);
+            var builder = new ConfigureDbContextOptionsBuilder<TDbContext>(serviceProvider, "");
 
             var configureAction = options.ConfigureActions
                 .TryGetValue(typeof(TDbContext), out object obj) ? obj : default;

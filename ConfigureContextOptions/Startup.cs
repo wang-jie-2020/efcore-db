@@ -28,28 +28,18 @@ namespace Demo
 
             var connectionString = Configuration.GetConnectionString("Default");
 
-            //services.AddDbContext<UserDbContext>(builder =>
+            //services.Configure<ConfigureDbContextOptions>(options =>
             //{
-            //    builder.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
-            //});
-
-            //services.AddDbContext<OrderDbContext>(builder =>
-            //{
-            //    builder.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
-            //});
-
-            //services.AddDbContext<ProductDbContext>(builder =>
-            //{
-            //    builder.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
+            //    options.Configure(builder =>
+            //    {
+            //        builder.DbContextOptionsBuilder.
+            //            UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
+            //    });
             //});
 
             services.Configure<ConfigureDbContextOptions>(options =>
             {
-                options.Configure(builder =>
-                {
-                    builder.DbContextOptionsBuilder.
-                        UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
-                });
+                options.UseMySQL(connectionString);
             });
 
             services.AddDbContext<UserDbContext>();
