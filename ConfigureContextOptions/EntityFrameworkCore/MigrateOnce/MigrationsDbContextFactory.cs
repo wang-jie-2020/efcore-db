@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.Extensions.Configuration;
 
-namespace Demo.EntityFrameworkCore
+namespace Demo.EntityFrameworkCore.MigrateOnce
 {
     public class MigrationsDbContextFactory : IDesignTimeDbContextFactory<MigrationsDbContext>
     {

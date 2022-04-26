@@ -1,5 +1,7 @@
+using System;
 using System.Threading.Tasks;
 using Demo.EntityFrameworkCore;
+using Demo.EntityFrameworkCore.Extensions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -25,20 +27,39 @@ namespace Demo
             services.AddMvc();
 
             var connectionString = Configuration.GetConnectionString("Default");
-            services.AddDbContext<UserDbContext>(builder =>
+
+            //services.AddDbContext<UserDbContext>(builder =>
+            //{
+            //    builder.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
+            //});
+
+            //services.AddDbContext<OrderDbContext>(builder =>
+            //{
+            //    builder.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
+            //});
+
+            //services.AddDbContext<ProductDbContext>(builder =>
+            //{
+            //    builder.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
+            //});
+
+            services.Configure<ConfigureDbContextOptions>(options =>
             {
-                builder.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
+                options.Configure(builder =>
+                {
+                    builder.DbContextOptionsBuilder.
+                        UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
+                });
             });
 
-            services.AddDbContext<OrderDbContext>(builder =>
-            {
-                builder.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
-            });
+            services.AddDbContext<UserDbContext>();
+            services.AddTransient(ConfigureDbContextOptionsFactory.CreateContextOptions<UserDbContext>);
 
-            services.AddDbContext<ProductDbContext>(builder =>
-            {
-                builder.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
-            });
+            services.AddDbContext<OrderDbContext>();
+            services.AddTransient(ConfigureDbContextOptionsFactory.CreateContextOptions<OrderDbContext>);
+
+            services.AddDbContext<ProductDbContext>();
+            services.AddTransient(ConfigureDbContextOptionsFactory.CreateContextOptions<ProductDbContext>);
 
             services.AddSwaggerGen();
         }

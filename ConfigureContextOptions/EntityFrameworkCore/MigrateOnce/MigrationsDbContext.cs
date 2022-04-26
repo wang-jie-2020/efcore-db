@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 
-namespace Demo.EntityFrameworkCore
+namespace Demo.EntityFrameworkCore.MigrateOnce
 {
     public class MigrationsDbContext : DbContext
     {
