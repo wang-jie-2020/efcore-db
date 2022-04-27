@@ -11,8 +11,10 @@ namespace Demo.EntityFrameworkCore.Extensions
         public static DbContextOptions<TDbContext> CreateContextOptions<TDbContext>(IServiceProvider serviceProvider)
             where TDbContext : DbContext
         {
+            var accessor = GetDbContextCreationAccessor<TDbContext>(serviceProvider);
+
             var options = serviceProvider.GetRequiredService<IOptions<ConfigureDbContextOptions>>().Value;
-            var builder = new ConfigureDbContextOptionsBuilder<TDbContext>(serviceProvider, "");
+            var builder = new ConfigureDbContextOptionsBuilder<TDbContext>(serviceProvider, accessor.ConnectionString);
 
             var configureAction = options.ConfigureActions
                 .TryGetValue(typeof(TDbContext), out object obj) ? obj : default;
@@ -30,6 +32,22 @@ namespace Demo.EntityFrameworkCore.Extensions
             }
 
             return builder.DbContextOptionsBuilder.Options;
+        }
+
+        private static ConfigureDbContextCreationAccessor GetDbContextCreationAccessor<TDbContext>(IServiceProvider serviceProvider)
+        {
+            var accessor = ConfigureDbContextCreationAccessor.Current;
+            if (accessor != null)
+            {
+                return accessor;
+            }
+
+            var connectionStringName = ConnectionStringNameAttribute.GetConnStringName<TDbContext>();
+            var connectionString = serviceProvider
+                .GetRequiredService<IConnectionStringResolver>()
+                .Resolve(connectionStringName);
+
+            return new ConfigureDbContextCreationAccessor(connectionString);
         }
     }
 }

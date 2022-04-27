@@ -37,9 +37,14 @@ namespace Demo
             //    });
             //});
 
+            //services.Configure<ConfigureDbContextOptions>(options =>
+            //{
+            //    options.UseMySQL(connectionString);
+            //});
+
             services.Configure<ConfigureDbContextOptions>(options =>
             {
-                options.UseMySQL(connectionString);
+                options.UseMySQL();
             });
 
             services.AddDbContext<UserDbContext>();
@@ -50,6 +55,8 @@ namespace Demo
 
             services.AddDbContext<ProductDbContext>();
             services.AddTransient(ConfigureDbContextOptionsFactory.CreateContextOptions<ProductDbContext>);
+
+            services.AddTransient<IConnectionStringResolver, DefaultConnectionResolver>();
 
             services.AddSwaggerGen();
         }

@@ -11,7 +11,7 @@ namespace Demo.EntityFrameworkCore.Extensions
 
         public DbContextOptionsBuilder DbContextOptionsBuilder { get; protected set; }
 
-        protected string ConnectionString { get; set; }
+        public string ConnectionString { get; set; }
 
         public ConfigureDbContextOptionsBuilder(IServiceProvider serviceProvider, string connectionString)
         {

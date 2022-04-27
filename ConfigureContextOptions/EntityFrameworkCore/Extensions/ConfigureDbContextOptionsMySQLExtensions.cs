@@ -29,5 +29,30 @@ namespace Demo.EntityFrameworkCore.Extensions
                 context.UseMySQL(connectionString, mySQLOptionsAction);
             });
         }
+
+        /*
+         *  传入connectionString不够灵活
+         */
+
+        public static void UseMySQL(
+            this ConfigureDbContextOptions options,
+            Action<MySqlDbContextOptionsBuilder> mySQLOptionsAction = null)
+        {
+            options.Configure(context =>
+            {
+                context.UseMySQL(mySQLOptionsAction);
+            });
+        }
+
+        public static void UseMySQL<TDbContext>(
+            this ConfigureDbContextOptions options,
+            Action<MySqlDbContextOptionsBuilder> mySQLOptionsAction = null)
+            where TDbContext : DbContext
+        {
+            options.Configure<TDbContext>(context =>
+            {
+                context.UseMySQL(mySQLOptionsAction);
+            });
+        }
     }
 }

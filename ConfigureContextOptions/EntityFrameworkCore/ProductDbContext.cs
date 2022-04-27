@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Demo.EntityFrameworkCore
 {
+    [ConnectionStringName("Default")]
     public class ProductDbContext : DbContext
     {
         public ProductDbContext(DbContextOptions<ProductDbContext> options) : base(options)
